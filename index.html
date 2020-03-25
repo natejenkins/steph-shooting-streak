@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+
+<html>
+
+
+  <head>
+   <head>
+    <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+    <!-- The loading of KaTeX is deferred to speed up page rendering -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+
+    <!-- To automatically render math in text elements, include the auto-render extension: -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+        onload="renderMathInElement(document.body);"></script>
+  </head>
+
+
+<body>
+
+<div class="container">
+
+<h1>The statistical likelihood of Steph Curry's ridiculous shooting streak</h1>
+
+<div>Amateur basketball players love to compare their own capabilities against NBA players and often feel like, "If I were only 6 inches taller I could have made it." And looking at the game numbers it doesn't appear insurmountable. The best 3-point shooters in the NBA hit around 40% of their attempts with <a href='http://espn.go.com/nba/player/stats/_/id/2011/kyle-korver'>Kyle Korver</a> leading the way at nearly 50%. An oft-forgotten detail is that these numbers occur against NBA level defenses. What would these guys shoot under little or no pressure, ie what would they shoot in practice?
+</div>
+
+<div>This is a hard number to get at since we don't generally have access to practice statistics of NBA players.  However, there is some recent anecdotal evidence that we can use to give an estimate for one of NBA's best shooters, Stephen Curry.  It was <a href='http://espn.go.com/nba/story/_/id/12692397/stephen-curry-golden-state-warriors-makes-77-consecutive-3-pointers-practice'>reported</a> that Steph recently hit 77 3-pointers in a row and 94 out of 100 total.  We're going to estimate his 3-point shooting percentage in two different ways: the easy, wrong way, and the not-so-easy right way.</div>
+
+<h2>The wrong way</h2>
+<div>
+
+Calculating Steph's likely shooting percentage is kind of tricky but we can first make an estimate assuming (incorrectly) that he didn't shoot 100 3s a day, but instead stopped at 77 (if this kind of simplification bothers you then don't become a physicist).  In this case his one-day probability is \({p_3}^{77}\), where \(p_3\) is his 3-point shooting percentage.  Let's assume for the moment that he shoots the same percentage in practice as in an actual NBA game.  Looking at his <a href='http://espn.go.com/nba/player/stats/_/id/3975/stephen-curry'>stats</a>, in 2015 this stands at 44%.  Plugging this into our equation we get:
+
+\(p_3 = {0.44}^{77} = 3.51*10^{-28}\).
+
+Clearly Steph shoots a bit better than that in practice.  How much better?  Steph has been a professional basketball player for 6 seasons.  Let's say he does this shooting drill every day he practices over those 6 seasons and that adds up to a total of 1000 days.  We also have to assume that this would be newsworthy, i.e. this is not something he pulls off everyday.  </div>
+
+<div>It's easier to first calculate the probability that he didn't hit 77 in a row on any of the 1000 days (remember we are still incorrectly assuming he only shot 77 3-pointers each day, bear with me):
+
+\(P_\textrm{failure} = (1-{p_3}^{77})^{1000} \approx (1-1000*{p_3}^{77})\)
+
+Then the probability that he did indeed hit 77 in a row is \(P_\textrm{success} = 1 - P_\textrm{failure}\).
+
+We are finally in a position to solve this, we can set \(P_\textrm{success}\) to 0.5, ie let's put the odds at 50% for success.  Solving the resultant equation:
+
+\(p_3 = (0.5/1000)^{1/77} \approx 90.6\%\)
+
+Let's say Steph was extremely lucky that day and the likelihood of this occurrence over 1000 days was only 1% instead of 50%, in that case \(p_3\) would drop to the embarrassingly-low 86%.
+</div>
+
+<div class="image-wrapper" id='fig1'>
+<iframe src='figures/wrong_way/wrong_way_output.html' scrolling="no" width="500px" height="500px" sandbox="allow-scripts" ></iframe>
+<div class="caption">
+Probability of setting a streak versus a player's 3 point shooting percentage.
+</div>
+</div>
+
+<h2>The right way</h2>
+<div>
+
+What was so wrong about the above calculation?  The article mentioned that Steph didn't shoot until he missed, he shot 100 3-pointers, making 77 in a row and 94 out of 100.  Limiting the calculation to a total of 77 shots means that if he misses the first attempt it is game-over, yet in reality he could start his streak on any shot up to and including the 24th.  What we'd really like to know is that given 100 shots total, what are the chances he hits 77 or more in a row.  The calculation relies on some very tricky counting, so let's cut to the chase (and interested parties can continue after the figure to see the full derivation):  
+To make this a likely occurrence (odds greater than \(50\%\)), Steph's percentage needs to be above \(89.5\%\).  If he got lucky (odds greater than \(1\%\)), that falls to about \(84.5\%\).  Feel free to play with the graph below to see how various factors influence this calculation.</div>
+
+<div class="image-wrapper" id='fig2'>
+<iframe src='figures/right_way/right_way_output.html' scrolling="no" width="500px" height="500px" sandbox="allow-scripts" ></iframe>
+<div class="caption">
+Probability of having a streak at least as long as "Streak Length" for a given shooting percentage.  The dark orange curve is the full calculation which takes into account all of the different ways a player can consecutively make "Streak Length" number of shots.  The blue curve is the naive calculation from figure <a href='#fig1'>1</a>.  You can see that using the naive method overestimates the shooting percentage required to succeed for a given streak.
+</div>
+</div>
+
+<h2>Final note</h2>
+<div>I've played a lot of basketball in my life, and have come across some amazing shooters, but I haven't seen anyone come close to these kind of numbers.
+
+In the same <a href='http://espn.go.com/nba/story/_/id/12692397/stephen-curry-golden-state-warriors-makes-77-consecutive-3-pointers-practice'>report</a>, Klay Thompson guesstimated his own streak at 36. That puts him at a likely practice percentage of around \(76\%\).</div>
+
+<div>
+WARNING: Lots of math ahead.
+
+<h2>Flipping Coins</h2>
+
+Steph Curry shooting a 3-pointer has two results, either a miss or a make.  As we've already seen, his chance of making it are much higher than his chance of missing.  This is analogous to Steph flipping a (very) biased coin, heads for a make, tails for a miss.  If we were to write out this series of coin flips, we'd end up with a string of 100 \(H\)s and \(T\)s (\(H\) for heads, \(T\) for tails) in some order, likely with many more heads than tails.  If he does this 1000 different times, we want to know what the probability is that he has a streak in any run greater than 70 (I'd argue this is still newsworthy).  Let's start with a fair coin first. 
+
+Each time I flip a fair coin there is a \(50\%\) probability for heads, let's call this probability \(p\), and likewise for tails, let's call this probability \(q\).  For the moment \(p\) and \(q\) are equal, but that won't always be the case.  A series of 5 flips might result in the following string: \(\textrm{HHTHT}\)
+
+The probability of this occurring is simply:
+
+\(P_5(\textrm{HHTHT}) = ppqpq = p^3q^2\)
+
+and in general:
+
+\(P_n(s) = p^kq^{n-k}\).
+
+The ordering of heads and tails in a given string does not affect the probability of that string occurring, only their respective numbers and probabilities.  To calculate not only the probability of a given string with say 3 heads occurring, but of having any string of length \(n\) with exactly 3 heads, we simply need to count all the different ways to get 3 heads in a string of length \(n\) and multiply that by \(P_n(s)\).
+
+This is given by the <a href='http://en.wikipedia.org/wiki/Binomial_coefficient'>binomial coefficient</a> \(\binom{n}{k}\) and we can use it to calculate the total probability of \(k\) heads in a random string of length \(n\):
+
+\(
+P_{n}(k) = \dbinom{n}{k}\,p^kq^{n-k}
+\)
+
+</div>
+
+<h2>Consecutive streaks of heads</h2>
+<div>
+
+We can now calculate the chances of getting \(k\) heads in \(n\) flips, but what we really want to know is the probability of having a run of consecutive heads longer than some value \(x\).  There is an excellent resource \cite{Schilling1990} that elaborates on how to do this, with the basic idea being the following:
+
+Let \(F_n(x)=P\,(R_n{\leq}\, x)\) be the probability of the longest run of \(n\) flips of a fair coin being less than or equal to \(x\).  Then the probability we are looking after, that of having a run greater than \(x\), is simply \(1 - F_n(x)\).  To give a concrete example, assume we are looking for \(F_n(3)\) and let \(A_n(x)\) be the number of different strings of length \(n\) containing a run no longer than \(x\).  In this case:
+
+\[
+F_n(3) = \frac{1}{2^n}A_n(3)
+\]
+</div>
+
+<div>It is a worthy exercise to try and calculate \(A_n(3)\) yourself (I failed).  The approach given in \citet{Schilling1990} is to build up the solution recursively.  Let's write out all substrings which start with a streak of 0 or more heads, terminate upon the first occurrence of a tails, and satisfy \(R_n{\leq}3\): \(T\), \(HT\), \(HHT\), and \(HHHT\).
+
+For the starting substring \(T\), there are \(A_{n-1}(3)\) possible ways to satisfy \(R_n{\leq}3\), we simply tack on all valid strings of length \(n-1\) to \(T\) and end up with a valid string of length \(n\).  For \(HT\), there are \(A_{n-2}(3)\) ways, and so on.  This gives the following full recursive formula for \(A_{n}(3)\):
+
+\[
+A_{n}(3) = A_{n-1}(3) + A_{n-2}(3) + A_{n-3}(3) + A_{n-4}(3)
+\]
+
+and in general:
+
+\[
+A_{n}(x) = \sum_{i=0}^{x} {A_{n-i-1}(x)}
+\]
+
+</div>
+
+<h2>Back to Steph's biased coin</h2>
+<div>
+
+We are finally getting close to our answer.  Streaks of biased coins not only involve counting the number of strings with runs less than \(x\), we also have to calculate the probability of the full string occurring.  Just as before, let's look at the specific case of \(x=3\).  Let \(C_n^{(k)}(x)\) be the number of strings with exactly \(k\) heads where the longest run is less than \(x\).  Then we can write out:
+
+\[
+F_n(x) = \sum_{k=0}^{n}{C_n^{(k)}(x)p^kq^{n-k}}
+\]</div>
+
+<div>If \(k\leq x\) then all strings are valid and \(C_n^{(k)}(x) = \binom{n}{k}\).  If \(x\lt k\) and \(k = n\), \(C_n^{(k)}(x) = 0\), no strings are valid.  For \(C_n^{(k)}(3)\) with \(x\lt{k}\lt{n}\), we can write out:
+
+\[
+C_n^{(k)}(3) = C_{n-1}^{(k)}(3) + C_{n-2}^{(k-1)}(3) + C_{n-3}^{(k-2)}(3) + C_{n-4}^{(k-3)}(3)
+\]
+
+If you have trouble understanding the above, think back to the substrings \(T\), \(HT\), \(HHT\), \(HHHT\).  Finally, in general:
+
+\[
+C_n^{(k)}(x) = \sum_{j=0}^{x} {C_{n-1-j}^{(k-j)}(x)}
+\]</div>
+
+<h2>Putting it all together</h2>
+<div>
+
+Finally we are in a position to properly count Steph Curry's streak.  On any given day, Steph's chances of making 77 or more in a row are:
+
+\[
+1 - F_{100}(76)
+\]
+
+and the chances of him doing this at least once over 1000 days is given by:
+
+\[
+1 - (F_{100}(76))^{1000}
+\]</div>
+
+<h2>References</h2>
+
+<div class='references'>Mark F. Schilling. The Longest Run of Heads. <em>The College Mathematics Journal</em> <strong>21</strong>, pp. 196-207 Mathematical Association of America, 1990. <a href="http://www.jstor.org/stable/2686886" target="_blank" rel="noopener noreferrer">Link</a></div>
+
+</div>
+</body>
+
+</html>
