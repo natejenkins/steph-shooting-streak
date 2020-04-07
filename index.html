@@ -4,18 +4,30 @@
 
 
   <head>
-   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css?family=Oswald&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css" integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/fonts/KaTeX_Main-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/fonts/KaTeX_Math-Italic.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/fonts/KaTeX_Size2-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/fonts/KaTeX_Size4-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 
-    <!-- The loading of KaTeX is deferred to speed up page rendering -->
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js" integrity="sha384-y23I5Q6l+B6vatafAwxRu/0oK/79VlbSz7Q9aiSZUvyWYIYsd+qj+o24G5ZU2zJz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,700i">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/contrib/copy-tex.min.css" crossorigin="anonymous">
+
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.1/dist/clipboard.min.js" integrity="sha256-hIvIxeqhGZF+VVeM55k0mJvWpQ6gTkWk3Emc+NmowYA=" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/contrib/mhchem.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/contrib/copy-tex.min.js" crossorigin="anonymous"></script>
+    <!-- <script defer src="index.js" type="text/javascript"></script> -->
+    <script defer src="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.js" integrity="sha256-4O4pS1SH31ZqrSO2A/2QJTVjTPqVe+jnYgOWUVr7EEc=" crossorigin="anonymous"></script>
 
     <!-- To automatically render math in text elements, include the auto-render extension: -->
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.13.18/dist/contrib/auto-render.min.js" integrity="sha384-vZTG03m+2yp6N6BNi5iM4rW4oIwk5DfcNdFfxkk9ZWpDriOkXX8voJBFrAO7MpVl" crossorigin="anonymous"
         onload="renderMathInElement(document.body);"></script>
   </head>
 
@@ -23,7 +35,6 @@
 <body>
 
 <div class="container">
-
 <h1>The statistical likelihood of Steph Curry's ridiculous shooting streak</h1>
 
 <div>Amateur basketball players love to compare their own capabilities against NBA players and often feel like, "If I were only 6 inches taller I could have made it." And looking at the game numbers it doesn't appear insurmountable. The best 3-point shooters in the NBA hit around 40% of their attempts with <a href='http://espn.go.com/nba/player/stats/_/id/2011/kyle-korver'>Kyle Korver</a> leading the way at nearly 50%. An oft-forgotten detail is that these numbers occur against NBA level defenses. What would these guys shoot under little or no pressure, ie what would they shoot in practice?
@@ -54,7 +65,7 @@ Let's say Steph was extremely lucky that day and the likelihood of this occurren
 </div>
 
 <div class="image-wrapper" id='fig1'>
-<iframe src='figures/wrong_way/wrong_way_output.html' scrolling="no" width="500px" height="500px" sandbox="allow-scripts" ></iframe>
+<iframe src='figures/wrong_way/wrong_way_output.html' scrolling="no" sandbox="allow-scripts"></iframe>
 <div class="caption">
 Probability of setting a streak versus a player's 3 point shooting percentage.
 </div>
@@ -67,11 +78,13 @@ What was so wrong about the above calculation?  The article mentioned that Steph
 To make this a likely occurrence (odds greater than \(50\%\)), Steph's percentage needs to be above \(89.5\%\).  If he got lucky (odds greater than \(1\%\)), that falls to about \(84.5\%\).  Feel free to play with the graph below to see how various factors influence this calculation.</div>
 
 <div class="image-wrapper" id='fig2'>
-<iframe src='figures/right_way/right_way_output.html' scrolling="no" width="500px" height="500px" sandbox="allow-scripts" ></iframe>
-<div class="caption">
-Probability of having a streak at least as long as "Streak Length" for a given shooting percentage.  The dark orange curve is the full calculation which takes into account all of the different ways a player can consecutively make "Streak Length" number of shots.  The blue curve is the naive calculation from figure <a href='#fig1'>1</a>.  You can see that using the naive method overestimates the shooting percentage required to succeed for a given streak.
+  <iframe src='figures/right_way/right_way_output.html' scrolling="no" sandbox="allow-scripts" ></iframe>
+
+  <div class="caption">
+  Probability of having a streak at least as long as "Streak Length" for a given shooting percentage.  The dark orange curve is the full calculation which takes into account all of the different ways a player can consecutively make "Streak Length" number of shots.  The blue curve is the naive calculation from figure <a href='#fig1'>1</a>.  You can see that using the naive method overestimates the shooting percentage required to succeed for a given streak.
+  </div>
 </div>
-</div>
+
 
 <h2>Final note</h2>
 <div>I've played a lot of basketball in my life, and have come across some amazing shooters, but I haven't seen anyone come close to these kind of numbers.
@@ -79,7 +92,6 @@ Probability of having a streak at least as long as "Streak Length" for a given s
 In the same <a href='http://espn.go.com/nba/story/_/id/12692397/stephen-curry-golden-state-warriors-makes-77-consecutive-3-pointers-practice'>report</a>, Klay Thompson guesstimated his own streak at 36. That puts him at a likely practice percentage of around \(76\%\).</div>
 
 <div>
-WARNING: Lots of math ahead.
 
 <h2>Flipping Coins</h2>
 
